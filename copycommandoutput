@@ -1,0 +1,42 @@
+/* 2. Write a following declarative/scripted pipeline.
+ Jenkins job name: copycommandoutput
+ A. Run the linux command and redirect the output to the command.output file.
+ B. Create folder of your name on Jenkins and copy command.output file to
+Jenkins (not manually).
+C. Print the following Message and run this task parallel with task A.
+ Message: The <specify job name> (DO NOT HARD CODE) run on <specify node name> (DO
+NOT HARD CODE). */
+
+pipeline {
+	agent { label 'Node1'}
+	stages {
+		stage("Parallel stages") {
+			parallel {
+				stage("redirect output of a command"){
+					steps{
+						sh '''
+							ls -ltr > command.output
+							cat command.output
+							pwd
+						'''
+						
+					}
+				}
+				stage("message"){
+					steps{
+						echo "The ${env.JOB_NAME} run on ${env.NODE_NAME}"
+					}
+				}
+			}
+
+		}
+		stage("create folder and copy file"){
+			steps{
+				script {
+					sh 'scp /home/parentsaksena/workspace/copycommandoutput/command.output ssh parulsaksena@192.168.53.16:/var/lib/parulsaksena'
+				}
+			}
+		}
+		
+	}
+}
