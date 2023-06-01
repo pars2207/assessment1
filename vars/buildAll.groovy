@@ -1,10 +1,5 @@
-pipeline {
-  agent any
-  stages {
-      stage('Hello') {
-          steps { 
-              echo 'Hello World'
-          }
-      }
-  }
+def call() {
+    echo "Executing mySharedLibraryStep"
+    // Perform specific actions or logic for this step
+    // ...
 }
